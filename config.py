@@ -1,0 +1,10 @@
+WIDTH = 500
+HEIGHT = 900
+FPS = 60
+
+# Colors
+WHITE = (255, 255, 255)
+BLUE = (50, 100, 255)
+RED = (255, 80, 80)
+GREEN = (80, 200, 120)
+BLACK = (0, 0, 0)
