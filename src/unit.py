@@ -10,6 +10,10 @@ class Unit:
 		self.speed = 2
 		self.target_y = target_y
 		self.hp = 100
+		self.damage = 5
+		self.range = 20
+		self.attack_cooldown = 30
+		self.attack_timer = 0
 
 	def update(self):
 		# Move vertically toward target

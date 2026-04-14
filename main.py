@@ -2,6 +2,10 @@ import pygame
 from config import *
 from src.tower import *
 from src.unit import *
+import random
+
+def distance(u1, u2):
+	return ((u1.x - u2.x) ** 2 + (u1.y - u2.y) ** 2) ** 0.5
 
 if __name__ == "__main__":
 	pygame.init()
@@ -11,6 +15,7 @@ if __name__ == "__main__":
 	running = True
 
 	units = []
+	enemy_spawn_timer = 0
 
 	while running:
 		# poll for events
@@ -25,6 +30,12 @@ if __name__ == "__main__":
 				if y > HEIGHT // 2:
 					units.append(Unit(x, y, 50, BLUE))
 
+		enemy_spawn_timer += 1
+
+		if enemy_spawn_timer > 120:  # every ~2 seconds
+			x = random.randint(100, WIDTH - 100)
+			units.append(Unit(x, 50, HEIGHT - 50, RED))
+			enemy_spawn_timer = 0
 		# fill the screen with a color to wipe away anything from last frame
 		screen.fill("purple")
 
@@ -41,9 +52,26 @@ if __name__ == "__main__":
 
 		# draw units
 		for unit in units:
-			unit.update()
+			unit.attack_timer += 1
+
+			target = None
+
+			for other in units:
+				if other != unit and other.color != unit.color:
+					if distance(unit, other) < unit.range:
+						target = other
+						break
+
+			if target:
+				if unit.attack_timer >= unit.attack_cooldown:
+					target.hp -= unit.damage
+					unit.attack_timer = 0
+			else:
+				unit.update()
 			unit.draw(screen)
 
+		units = [u for u in units if u.hp > 0]
+		
 		# flip() the display to put your work on screen
 		pygame.display.flip()
 
