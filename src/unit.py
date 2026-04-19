@@ -1,26 +1,25 @@
-import pygame
 from config import *
+import pygame
 
+"""
+Strength depends on color:
+limegreen
+forestgreen
+black
+"""
 class Unit:
-	def __init__(self, x, y, target_y, color):
-		self.x = x
-		self.y = y
-		self.radius = 10
+	def __init__(self, game, x, y, color, width, height):
+		"""
+		x and y are the top/facing coord of triangles
+		"""
+		self.game = game
+		self.screen = game.screen
+		self.speed = 1
 		self.color = color
-		self.speed = 2
-		self.target_y = target_y
-		self.hp = 100
-		self.damage = 5
-		self.range = 20
-		self.attack_cooldown = 30
-		self.attack_timer = 0
+		self.height = height
+		self.width = width
+		self.points = [(x, y), (x-self.width/2,y+self.height), (x+self.width/2,y+self.height)]
 
-	def update(self):
-		# Move vertically toward target
-		if self.y > self.target_y:
-			self.y -= self.speed
-		elif self.y < self.target_y:
-			self.y += self.speed
-
-	def draw(self, surface):
-		pygame.draw.circle(surface, self.color, (int(self.x), int(self.y)), self.radius)
+	def draw(self):
+		pygame.draw.polygon(self.screen, BLACK, self.points, 5)
+		pygame.draw.polygon(self.screen, self.color, self.points)
